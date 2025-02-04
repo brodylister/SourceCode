@@ -41,8 +41,11 @@ namespace    // unnamed, anonymous namespace
       ///           else       return false;
       ///         do this instead:
       ///           return a < b;
-
-    /////////////////////// END-TO-DO (1) ////////////////////////////
+      if (std::abs(lhs - rhs) <= EPSILON1) {
+        return true;
+      }
+      return ( std::abs( lhs - rhs ) <= std::max( lhs, rhs ) * EPSILON2 );
+      /////////////////////// END-TO-DO (1) ////////////////////////////
   }
 }    // unnamed, anonymous namespace
 
