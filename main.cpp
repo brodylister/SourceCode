@@ -19,18 +19,38 @@ Implement function main() to use the GroceryItem class:
 */
 
 int main() {
-  std::vector<std::unique_ptr<GroceryItem>> groceryItemInputs;
+  // going to attempt to implement this with normal pointers (fingers crossed)
+  std::vector<GroceryItem*> cart;
+  GroceryItem               item;
 
-  GroceryItem input;
-  while (std::cin >> input) { // read from cin and verify data, will read until EOF
-    std::unique_ptr<GroceryItem> GroceryItemPtr = std::make_unique<GroceryItem>( input );
-    groceryItemInputs.push_back( GroceryItemPtr );
+  // read GroceryItems from cin
+  while( std::cout << "Enter UPC, Product Brand, Product Name, and Price\n", std::cin >> item )
+  {                                                                     // will use GroceryItem's op>> to store cin to item, loop will continue until end of file
+    GroceryItem * ptrItem = new GroceryItem( std::move( item ) );       // move item to memory and make pointer
+    cart.push_back( ptrItem );                                          // could potentially condense these lines into an emplace_back
+
+    std::cout << "Item added to shopping cart: " << *cart.back() << "\n\n";
   }
 
-  for( auto output = groceryItemInputs.rbegin(); output != groceryItemInputs.rend(); output++) // reverse iterate through groceryItemInputs and write to cout
-  {
-    std::cout << *( *output );
-    delete *(output);
+  // write GroceryItems to cout in reverse order (using std::const_reverse_iterator)
+  for (std::vector<GroceryItem *>::const_reverse_iterator it = cart.crbegin(); it != cart.crend(); ++it) {
+    std::cout << **it << "\n";
+    delete *it;
   }
-    return 0;
+  /*
+
+  example implementation with smart pointers:
+  std::vector<std::make_unique<GroceryItem>> cart;
+  GroceryItem                                item;
+
+  while ( std::cout << "Enter UPC, Product Brand, Product Name, and Price\n", std::cin >> item ) {
+    cart.emplace_back(std::make_unique<GroceryItem>(std::move(item)));
+  }
+
+  for (auto it = cart.crbegin(), it < crend(); ++it) {
+    std::cout << **it << "\n";
+  }
+
+  */
+  return 0;
 }
