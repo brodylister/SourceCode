@@ -323,11 +323,11 @@ std::weak_ordering GroceryItem::operator<=>( const GroceryItem & rhs ) const noe
   {
     return result;
   }
-  if( std::weak_ordering result = ( _brandName <=> rhs.brandName() ); result != 0 )
+  if( std::weak_ordering result = ( _productName <=> rhs.productName() ); result != 0 )
   {
     return result;
   }
-  if( std::weak_ordering result = ( _productName <=> rhs.productName() ); result != 0 )
+  if( std::weak_ordering result = ( _brandName <=> rhs.brandName() ); result != 0 )
   {
     return result;
   }
