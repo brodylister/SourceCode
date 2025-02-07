@@ -37,6 +37,8 @@ int main() {
     std::cout << **it << "\n";
     delete *it;
   }
+
+
   /*
 
   example implementation with smart pointers:

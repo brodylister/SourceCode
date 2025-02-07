@@ -41,9 +41,10 @@ namespace    // unnamed, anonymous namespace
       ///           else       return false;
       ///         do this instead:
       ///           return a < b;
-      if (std::abs(lhs - rhs) <= EPSILON1) {
-        return true;
-      }
+    if( std::abs( lhs - rhs ) <= EPSILON1 )
+    {
+      return true;
+    }
       return ( std::abs( lhs - rhs ) <= std::max( std::abs( lhs ), std::abs( rhs ) ) * EPSILON2 );
       /////////////////////// END-TO-DO (1) ////////////////////////////
   }
@@ -66,10 +67,10 @@ GroceryItem::GroceryItem( std::string productName,
                           std::string brandName,
                           std::string upcCode,
                           double      price )
-  : _upcCode( std::move( upcCode ) ),
-    _brandName( std::move( brandName ) ),
+  : _upcCode(     std::move( upcCode     ) ),
+    _brandName(   std::move( brandName   ) ),
     _productName( std::move( productName ) ),
-    _price( std::move( price ) )
+    _price(       std::move( price       ) )
 /////////////////////// END-TO-DO (2) ////////////////////////////
 {}                                                                    // Avoid setting values in constructor's body (when possible)
 
@@ -79,10 +80,10 @@ GroceryItem::GroceryItem( std::string productName,
 // Copy constructor
 ///////////////////////// TO-DO (3) //////////////////////////////
 GroceryItem::GroceryItem( GroceryItem const & other )
-   :_upcCode(     other.upcCode() ),
-    _brandName(   other.brandName() ),
+   :_upcCode(     other.upcCode()     ),
+    _brandName(   other.brandName()   ),
     _productName( other.productName() ),
-    _price(       other.price() )
+    _price(       other.price()       )
 /////////////////////// END-TO-DO (3) ////////////////////////////
 {}                                                                    // Avoid setting values in constructor's body (when possible)
 
@@ -92,10 +93,10 @@ GroceryItem::GroceryItem( GroceryItem const & other )
 // Move constructor
 ///////////////////////// TO-DO (4) //////////////////////////////
 GroceryItem::GroceryItem( GroceryItem && other ) noexcept
-  : _upcCode(     std::move( other.upcCode() ) ),
-    _brandName(   std::move( other.brandName() ) ),
+  : _upcCode(     std::move( other.upcCode()     ) ),
+    _brandName(   std::move( other.brandName()   ) ),
     _productName( std::move( other.productName() ) ),
-    _price(       std::move( other.price() ) )
+    _price(       std::move( other.price()       ) )
 /////////////////////// END-TO-DO (4) ////////////////////////////
 {}
 
@@ -121,10 +122,10 @@ GroceryItem & GroceryItem::operator=( GroceryItem const & rhs ) &
 ///////////////////////// TO-DO (6) //////////////////////////////
 GroceryItem & GroceryItem::operator=( GroceryItem && rhs ) & noexcept
 {
-  _upcCode     = std::move( rhs.upcCode() );
-  _brandName   = std::move( rhs.brandName() );
+  _upcCode     = std::move( rhs.upcCode()     );
+  _brandName   = std::move( rhs.brandName()   );
   _productName = std::move( rhs.productName() );
-  _price       = std::move( rhs.price() );
+  _price       = std::move( rhs.price()       );
   return *this;
 }
 /////////////////////// END-TO-DO (6) ////////////////////////////
@@ -359,10 +360,10 @@ bool GroceryItem::operator==( const GroceryItem & rhs ) const noexcept
 
   ///////////////////////// TO-DO (20) //////////////////////////////
   if (
-    _upcCode == rhs.upcCode() &&
-    _productName == rhs.productName() &&
-    _brandName == rhs.brandName() &&
-    floating_point_is_equal(_price, rhs.price())
+    _upcCode      == rhs.upcCode()     &&
+    _productName  == rhs.productName() &&
+    _brandName    == rhs.brandName()   &&
+    floating_point_is_equal( _price, rhs.price() )
   )
     {
       return true;
