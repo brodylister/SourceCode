@@ -30,14 +30,16 @@ int main() {
   // read GroceryItems from cin
   while( std::cin >> item )
   {                                                                          // will use GroceryItem's op>> to store cin to item, loop will continue until end of file or invalid input
-    cart.push_back( std::make_unique<GroceryItem>( std::move( item ) ) );
+    cart.push_back( std::make_unique<GroceryItem>( std::move( item ) ) );   // is emplace_back better?
     std::cout << "Item added to shopping cart: " << *cart.back() << "\n\n";
 
-    std::cout << "Enter UPC, Product Brand, Product Name, and Price:\n";
+    std::cout << "Enter UPC, Product Brand, Product Name, and Price:\n";    // this is not a great way of writing this loop but it works and I couldn't think of anything else
   }
 
   // write GroceryItems to cout in reverse order (using std::const_reverse_iterator)
-  for (auto it = cart.crbegin(); it != cart.crend(); ++it) {
+  std::cout << "Here is a list of items in your shopping cart:\n";
+  for( auto it = cart.crbegin(); it != cart.crend(); ++it )
+  {
     std::cout << **it << '\n';
   }
   return 0;
