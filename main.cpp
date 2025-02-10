@@ -1,6 +1,7 @@
-#include <iostream>
+#include <iostream>         // istream, ostream
 #include <memory>
 #include <vector>
+#include <utility>          // move()
 
 #include "GroceryItem.hpp"
 /*
@@ -20,39 +21,24 @@ Implement function main() to use the GroceryItem class:
 
 int main() {
   // going to attempt to implement this with normal pointers (fingers crossed)
-  std::vector<GroceryItem*> cart;
+  std::vector<std::unique_ptr<GroceryItem>> cart;
   GroceryItem               item;
 
-  // read GroceryItems from cin
-  while( std::cout << "Enter UPC, Product Brand, Product Name, and Price\n", std::cin >> item )
-  {                                                                     // will use GroceryItem's op>> to store cin to item, loop will continue until end of file
-    GroceryItem * ptrItem = new GroceryItem( std::move( item ) );       // move item to memory and make pointer
-    cart.push_back( ptrItem );                                          // could potentially condense these lines into an emplace_back
+  std::cout << "Welcome to Kroger.  Place grocery items into your shopping cart by entering each item's information. \nEnclose string entries in quotes, separate fields with commas. \nFor example:  \"00016000306707\", \"Betty Crocker\", \"Betty Crocker Double Chocolate Chunk Cookie Mix\", 17.19 \nEnter CTL-Z (Windows) or CTL-D (Linux) to quit.\n\n";
 
+  std::cout << "Enter UPC, Product Brand, Product Name, and Price:\n";
+  // read GroceryItems from cin
+  while( std::cin >> item )
+  {                                                                          // will use GroceryItem's op>> to store cin to item, loop will continue until end of file or invalid input
+    cart.push_back( std::make_unique<GroceryItem>( std::move( item ) ) );
     std::cout << "Item added to shopping cart: " << *cart.back() << "\n\n";
+
+    std::cout << "Enter UPC, Product Brand, Product Name, and Price:\n";
   }
 
   // write GroceryItems to cout in reverse order (using std::const_reverse_iterator)
-  for (std::vector<GroceryItem *>::const_reverse_iterator it = cart.crbegin(); it != cart.crend(); ++it) {
-    std::cout << **it << "\n";
-    delete *it;
+  for (auto it = cart.crbegin(); it != cart.crend(); ++it) {
+    std::cout << **it << '\n';
   }
-
-
-  /*
-
-  example implementation with smart pointers:
-  std::vector<std::make_unique<GroceryItem>> cart;
-  GroceryItem                                item;
-
-  while ( std::cout << "Enter UPC, Product Brand, Product Name, and Price\n", std::cin >> item ) {
-    cart.emplace_back(std::make_unique<GroceryItem>(std::move(item)));
-  }
-
-  for (auto it = cart.crbegin(), it < crend(); ++it) {
-    std::cout << **it << "\n";
-  }
-
-  */
   return 0;
 }
