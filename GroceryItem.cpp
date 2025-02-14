@@ -42,13 +42,9 @@ namespace    // unnamed, anonymous namespace
       ///         do this instead:
       ///           return a < b;
     auto val = std::abs( lhs - rhs );
-
-    if( val <= EPSILON1 )
-    {
-      return true;
-    }
-      return ( val <= std::max( std::abs( lhs ), std::abs( rhs ) ) * EPSILON2 );
-      /////////////////////// END-TO-DO (1) ////////////////////////////
+    auto magnitude = std::max( std::abs( lhs ), std::abs( rhs ) );
+    return val < EPSILON1 || val < EPSILON2 * magnitude;           // short circuit bool eval will determine lhs first
+    /////////////////////// END-TO-DO (1) ////////////////////////////
   }
 }    // unnamed, anonymous namespace
 
@@ -72,7 +68,7 @@ GroceryItem::GroceryItem( std::string productName,
   : _upcCode(     std::move( upcCode     ) ),
     _brandName(   std::move( brandName   ) ),
     _productName( std::move( productName ) ),
-    _price(       std::move( price       ) )
+    _price(                ( price       ) )
 /////////////////////// END-TO-DO (2) ////////////////////////////
 {}                                                                    // Avoid setting values in constructor's body (when possible)
 
@@ -98,7 +94,9 @@ GroceryItem::GroceryItem( GroceryItem && other ) noexcept
   : _upcCode(     std::move( other._upcCode     ) ),
     _brandName(   std::move( other._brandName   ) ),
     _productName( std::move( other._productName ) ),
-    _price(       std::move( other._price       ) )
+    _price(                ( other._price       ) )
+
+// = default;
 /////////////////////// END-TO-DO (4) ////////////////////////////
 {}
 
@@ -109,7 +107,7 @@ GroceryItem::GroceryItem( GroceryItem && other ) noexcept
 GroceryItem & GroceryItem::operator=( GroceryItem const & rhs ) &
 {
   ///////////////////////// TO-DO (5) //////////////////////////////
-  if( this == &rhs ) return *this;
+  if( this == &rhs ) return *this; // could invert this and enclose the next four lines to be more efficient
   _upcCode     = rhs.upcCode();
   _brandName   = rhs.brandName();
   _productName = rhs.productName();
@@ -125,11 +123,11 @@ GroceryItem & GroceryItem::operator=( GroceryItem const & rhs ) &
 ///////////////////////// TO-DO (6) //////////////////////////////
 GroceryItem & GroceryItem::operator=( GroceryItem && rhs ) & noexcept
 {
-  if( this == &rhs ) return *this;
+  if( this == &rhs ) return *this;    // could invert this and enclose the next four lines to be more efficient
   _upcCode     = std::move( rhs._upcCode     );
   _brandName   = std::move( rhs._brandName   );
   _productName = std::move( rhs._productName );
-  _price       = std::move( rhs._price       );
+  _price       =          ( rhs._price       );
   return *this;
 }
 /////////////////////// END-TO-DO (6) ////////////////////////////
@@ -138,7 +136,7 @@ GroceryItem & GroceryItem::operator=( GroceryItem && rhs ) & noexcept
 
 // Destructor
 ///////////////////////// TO-DO (7) //////////////////////////////
-GroceryItem::~GroceryItem() noexcept {}
+GroceryItem::~GroceryItem() noexcept {}    // = default;
 /////////////////////// END-TO-DO (7) ////////////////////////////
 
 
@@ -344,11 +342,7 @@ std::weak_ordering GroceryItem::operator<=>( const GroceryItem & rhs ) const noe
   {
     return std::weak_ordering::less;
   }
-  if( _price > rhs.price() )
-  {
-    return std::weak_ordering::greater;
-  }
-  return std::weak_ordering::equivalent;
+  return std::weak_ordering::greater;
   /////////////////////// END-TO-DO (19) ////////////////////////////
 }
 
@@ -366,7 +360,7 @@ bool GroceryItem::operator==( const GroceryItem & rhs ) const noexcept
            _upcCode == rhs.upcCode() &&
            _brandName == rhs.brandName() &&
            _productName == rhs.productName()
-           );
+           );                                                     // uses short circuit bool eval
   /////////////////////// END-TO-DO (20) ////////////////////////////
 }
 
@@ -405,18 +399,16 @@ std::istream & operator>>( std::istream & stream, GroceryItem & groceryItem )
     ///        2) https://www.youtube.com/watch?v=Mu-GUZuU31A
   GroceryItem item;
 
-  if( stream >> std::quoted( item._upcCode )
-      >> delimiter
-      >> std::quoted( item._brandName )
-      >> delimiter
-      >> std::quoted( item._productName )
-      >> delimiter
-      >> item._price )
+  if(
+      stream >> std::ws >> std::quoted( item._upcCode ) &&
+      stream >> std::ws >> delimiter && delimiter == ',' &&
+      stream >> std::ws >> std::quoted( item._brandName ) &&
+      stream >> std::ws >> delimiter && delimiter == ',' &&
+      stream >> std::ws >> std::quoted( item._productName ) &&
+      stream >> std::ws >> delimiter && delimiter == ',' &&
+      stream >> std::ws >> item._price )                                   // using short circuit bool eval again
   {
-    if( delimiter == ',' )
-    {
-      groceryItem = std::move( item );
-    }
+    groceryItem = std::move( item );
   }
   return stream;
   /////////////////////// END-TO-DO (21) ////////////////////////////

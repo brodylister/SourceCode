@@ -1,9 +1,10 @@
 #include <iostream>         // istream, ostream
-#include <memory>
+#include <memory>           // std::unique_ptr
 #include <vector>
 #include <utility>          // move()
+#include <iomanip>          // std::setprecision()
 
-#include "GroceryItem.hpp"
+#include "GroceryItem.hpp"  // GroceryItem
 /*
 INSTRUCTIONS:
 Implement function main() to use the GroceryItem class:
@@ -20,24 +21,23 @@ Implement function main() to use the GroceryItem class:
 */
 
 int main() {
+  std::cout << std::showpoint << std::fixed << std::setprecision( 2 ); // sticky settings
+
   // going to attempt to implement this with normal pointers (fingers crossed)
   std::vector<std::unique_ptr<GroceryItem>> cart;
   GroceryItem               item;
 
   std::cout << "Welcome to Kroger.  Place grocery items into your shopping cart by entering each item's information. \nEnclose string entries in quotes, separate fields with commas. \nFor example:  \"00016000306707\", \"Betty Crocker\", \"Betty Crocker Double Chocolate Chunk Cookie Mix\", 17.19 \nEnter CTL-Z (Windows) or CTL-D (Linux) to quit.\n\n";
 
-  std::cout << "Enter UPC, Product Brand, Product Name, and Price:\n";
   // read GroceryItems from cin
-  while( std::cin >> item )
+  while( std::cout << "Enter UPC, Product Brand, Product Name, and Price:\n", std::cin >> item )
   {                                                                          // will use GroceryItem's op>> to store cin to item, loop will continue until end of file or invalid input
-    cart.push_back( std::make_unique<GroceryItem>( std::move( item ) ) );   // is emplace_back better?
+    cart.emplace_back( std::make_unique<GroceryItem>( std::move( item ) ) );
     std::cout << "Item added to shopping cart: " << *cart.back() << "\n\n";
-
-    std::cout << "Enter UPC, Product Brand, Product Name, and Price:\n";    // this is not a great way of writing this loop but it works and I couldn't think of anything else
   }
 
   // write GroceryItems to cout in reverse order (using std::const_reverse_iterator)
-  std::cout << "Here is a list of items in your shopping cart:\n";
+  std::cout << "Here is an itemized list of items in your shopping cart:\n";
   for( auto it = cart.crbegin(); it != cart.crend(); ++it )
   {
     std::cout << **it << '\n';

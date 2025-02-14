@@ -22,7 +22,27 @@ Enter UPC, Product Brand, Product Name, and Price:
 Item added to shopping cart: "", "", "", 14.43
 
 Enter UPC, Product Brand, Product Name, and Price:
-Here is a list of items in your shopping cart:
+Item added to shopping cart: "", "", "", 14.43
+
+Enter UPC, Product Brand, Product Name, and Price:
+Item added to shopping cart: "", "", "", 14.43
+
+Enter UPC, Product Brand, Product Name, and Price:
+Item added to shopping cart: "", "", "", 14.43
+
+Enter UPC, Product Brand, Product Name, and Price:
+Item added to shopping cart: "", "", "", 14.43
+
+Enter UPC, Product Brand, Product Name, and Price:
+Item added to shopping cart: "", "", "", 14.43
+
+Enter UPC, Product Brand, Product Name, and Price:
+Here is an itemized list of items in your shopping cart:
+"", "", "", 14.43
+"", "", "", 14.43
+"", "", "", 14.43
+"", "", "", 14.43
+"", "", "", 14.43
 "", "", "", 14.43
 "00014100072331", "Pepperidge Farm", "Pepperidge Farm Classic Cookie Favorites", 14.43
 "00038000570742", "Kellogg's", "Kellogg's Cereal Krave Chocolate", 18.66
