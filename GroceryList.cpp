@@ -285,7 +285,8 @@ void GroceryList::remove( std::size_t offsetFromTop )
       ///
       /// std::shift_* will be helpful, or write your own loop.  Also remember that you must keep track of the number of valid
       /// grocery items in your array, so don't forget to adjust _gList_array_size.
-
+    std::shift_left((_gList_array.begin() + offsetFromTop), _gList_array.end(), 1);
+    --_gList_array_size;
     /////////////////////// END-TO-DO (8) ////////////////////////////
   } // Part 1 - Remove from array
 
@@ -302,7 +303,7 @@ void GroceryList::remove( std::size_t offsetFromTop )
       ///
       /// Behind the scenes, std::vector::erase() shifts to the left everything after the insertion point, just like you did for the
       /// array above.
-
+    _gList_vector.erase((_gList_vector.begin() + offsetFromTop));
     /////////////////////// END-TO-DO (9) ////////////////////////////
   } // Part 2 - Remove from vector
 
@@ -315,7 +316,7 @@ void GroceryList::remove( std::size_t offsetFromTop )
       /// takes a pointer (or more accurately, an iterator) that points to the grocery item to remove.  You need to convert the
       /// zero-based offset from the top (the index) to an iterator by advancing _gList_dll.begin() offsetFromTop times.  The STL
       /// has a function called std::next() that does that, or you can write your own loop.
-
+    _gList_dll.erase(std::next(_gList_dll.cbegin(), offsetFromTop));
     /////////////////////// END-TO-DO (10) ////////////////////////////
   } // Part 3 - Remove from doubly linked list
 
@@ -329,7 +330,7 @@ void GroceryList::remove( std::size_t offsetFromTop )
       /// cannot look backwards, only forward.  You need to convert the zero-based offset from the top (the index) to an iterator by
       /// advancing _gList_sll.before_begin() offsetFromTop times.  The STL has a function called std::next() that does that, or you
       /// can write your own loop.
-
+    _gList_sll.erase_after(std::next(_gList_sll.cbegin(), (offsetFromTop - 1)));
     /////////////////////// END-TO-DO (11) ////////////////////////////
   } // Part 4 - Remove from singly linked list
 
@@ -346,7 +347,8 @@ void GroceryList::moveToTop( const GroceryItem & groceryItem )
   ///////////////////////// TO-DO (12) //////////////////////////////
     /// If the grocery item exists, then remove and reinsert it.  Otherwise, do nothing.
     /// Remember, you already have functions to do all this.
-
+  this->remove(groceryItem);
+  this->insert(groceryItem);
   /////////////////////// END-TO-DO (12) ////////////////////////////
 }
 
@@ -360,7 +362,9 @@ GroceryList & GroceryList::operator+=( const std::initializer_list<GroceryItem> 
     /// grocery list. The input type is just a container of grocery items accessible with iterators just like all the other
     /// containers.  The constructor above gives an example.  Remember to add that grocery item at the bottom of each container
     /// (array, vector, list, and forward_list) of this grocery list, and that you already have a function that does that.
-
+  for (GroceryItem item : rhs) {
+    this->insert(item);
+  }
   /////////////////////// END-TO-DO (13) ////////////////////////////
 
   // Verify the internal grocery list state is still consistent amongst the four containers
@@ -379,7 +383,9 @@ GroceryList & GroceryList::operator+=( const GroceryList & rhs )
     /// to traverse. Walk the container you picked inserting its grocery items to the bottom of this grocery list. Remember to add
     /// that grocery item at the bottom of each container (array, vector, list, and forward_list) of this grocery list, and that you
     /// already have a function that does that.
-
+  for (GroceryItem item : rhs._gList_vector) {
+    this->insert(item);
+  }
   /////////////////////// END-TO-DO (14) ////////////////////////////
 
   // Verify the internal grocery list state is still consistent amongst the four containers
