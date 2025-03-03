@@ -14,20 +14,11 @@ namespace
   void basicScenario()
   {
     // Let's start a grocery list
-    std::clog << "Creating one item...\n";
-    GroceryItem item("brodyitem");
-    std::clog << "GroceryItem created: " << item << "\n";
-    std::clog << "Creating one list...\n";
-    GroceryList list{item};
-    std::clog << "GroceryList created: " << list << "\n";
-
-    std::clog << "Creating thingsToBuy...\n";
     GroceryList thingsToBuy = { { "milk"     },
                                 { "hot dogs" },
                                 { "eggs"     },
                                 { "bread"    } };
 
-    std::clog << "Created thingsToBuy.\nthingsToBUy.size() = " << thingsToBuy.size() << "\n";
     // Changed my mind, I want to make sure I can get eggs before running out of money so I'm going to move that to the top of my list
     thingsToBuy.moveToTop( { "eggs" } );
 
@@ -126,6 +117,56 @@ int main()
      /// indexed offsets.  Remove grocery items from the top, middle, and bottom.  Create, concatenate, rearrange, and compare
      /// several (more than two) lists. Have some fun with it!  The purpose is to show me you, as a GroceryList class consumer
      /// (i.e., the client) understand how to *use* the GroceryList.
+
+    // Let's buy some things to stock various hotel rooms. First is Room 1. To start:
+    GroceryList room1List{{"coke"}};
+    room1List += {{"pepsi"}, {"water"}};
+
+    GroceryList room2List{{"coffee"}};
+    room2List.insert({"sugar"}, GroceryList::Position::TOP);
+    room2List.insert({"creamer"}, GroceryList::Position::BOTTOM);
+
+    GroceryList room3List{{"tea"}};
+    room3List.insert({"sugar"}, 1);
+
+    // Let's compare them and output them.
+
+    GroceryList extractedList;
+    std::stringstream stream;
+
+    bool beReallyShocked = false;
+    if (stream << room1List) {
+      beReallyShocked = true;
+    }
+
+    std::istringstream expectedResultsStream( R"( "",   "",            "eggs",          0.0
+                                                  "",   "",            "milk",          0.0
+                                                  "",   "",            "hot dogs",      0.0
+                                                  "",   "Lakes 'Ole",  "butter",        0.0
+                                                  "",   "",            "bread",         0.0
+                                                  "",   "",            "bananas",       0.0
+                                                  "",   "",            "apples",        0.0
+                                                  "",   "Frito Lays",  "potato chips",  0.0
+                                                  "",   "Ruffles",     "potato chips",  0.0
+                                                  "",   "",            "pretzels",      0.0 )"   // multi-line raw string literal of grocery items
+                                               );
+
+    expectedResultsStream >> extractedList;
+
+    std::weak_ordering order = room1List <=> room2List;
+
+    std::weak_ordering order2 = order;
+
+    bool beveragePreferences = room2List == room3List;
+
+    bool bevPref2 = beveragePreferences;
+
+    if (bevPref2 || beReallyShocked) order2 = std::weak_ordering::equivalent;
+
+    room2List += room3List;
+
+    room1List.moveToTop({"pepsi"});
+
 
     /////////////////////// END-TO-DO (1) ////////////////////////////
   }

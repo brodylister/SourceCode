@@ -290,7 +290,12 @@ void GroceryList::remove( std::size_t offsetFromTop )
       ///
       /// std::shift_* will be helpful, or write your own loop.  Also remember that you must keep track of the number of valid
       /// grocery items in your array, so don't forget to adjust _gList_array_size.
-    std::shift_left((_gList_array.begin() + offsetFromTop), _gList_array.end(), 1);
+
+
+    for (auto i = offsetFromTop + 1; i != _gList_array_size; ++i) {
+      _gList_array[i-1] = std::move(_gList_array[i]);
+    }
+    _gList_array[_gList_array_size - 1] = GroceryItem{};
     --_gList_array_size;
     /////////////////////// END-TO-DO (8) ////////////////////////////
   } // Part 1 - Remove from array
@@ -321,7 +326,7 @@ void GroceryList::remove( std::size_t offsetFromTop )
       /// takes a pointer (or more accurately, an iterator) that points to the grocery item to remove.  You need to convert the
       /// zero-based offset from the top (the index) to an iterator by advancing _gList_dll.begin() offsetFromTop times.  The STL
       /// has a function called std::next() that does that, or you can write your own loop.
-    _gList_dll.erase(std::next(_gList_dll.cbegin(), offsetFromTop));
+    _gList_dll.erase(std::next(_gList_dll.begin(), offsetFromTop));
     /////////////////////// END-TO-DO (10) ////////////////////////////
   } // Part 3 - Remove from doubly linked list
 
@@ -335,7 +340,7 @@ void GroceryList::remove( std::size_t offsetFromTop )
       /// cannot look backwards, only forward.  You need to convert the zero-based offset from the top (the index) to an iterator by
       /// advancing _gList_sll.before_begin() offsetFromTop times.  The STL has a function called std::next() that does that, or you
       /// can write your own loop.
-    _gList_sll.erase_after(std::next(_gList_sll.cbegin(), (offsetFromTop - 1)));
+    _gList_sll.erase_after(offsetFromTop == 0 ? _gList_sll.before_begin() : std::next(_gList_sll.begin(), (offsetFromTop - 1)));
     /////////////////////// END-TO-DO (11) ////////////////////////////
   } // Part 4 - Remove from singly linked list
 
@@ -352,6 +357,7 @@ void GroceryList::moveToTop( const GroceryItem & groceryItem )
   ///////////////////////// TO-DO (12) //////////////////////////////
     /// If the grocery item exists, then remove and reinsert it.  Otherwise, do nothing.
     /// Remember, you already have functions to do all this.
+  if (find(groceryItem) == size()) return;
   this->remove(groceryItem);
   this->insert(groceryItem);
   /////////////////////// END-TO-DO (12) ////////////////////////////

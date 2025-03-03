@@ -136,7 +136,7 @@ GroceryItem & GroceryItem::operator=( GroceryItem && rhs ) & noexcept
 
 // Destructor
 ///////////////////////// TO-DO (7) //////////////////////////////
-GroceryItem::~GroceryItem() noexcept {}    // = default;
+GroceryItem::~GroceryItem() noexcept = default;
 /////////////////////// END-TO-DO (7) ////////////////////////////
 
 
