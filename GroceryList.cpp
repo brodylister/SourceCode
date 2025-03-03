@@ -93,7 +93,8 @@ std::size_t GroceryList::size() const
   ///////////////////////// TO-DO (1) //////////////////////////////
     /// All the containers are the same size, so pick one and return the size of that.  Since the forward_list has to calculate the
     /// size on demand, stay away from using that one.
-  return _gList_vector.size();
+  std::clog << "size() called: " << _gList_array_size << "\n";
+  return _gList_array_size;
   /////////////////////// END-TO-DO (1) ////////////////////////////
 }
 
@@ -151,6 +152,7 @@ void GroceryList::insert( const GroceryItem & groceryItem, Position position )
   if     ( position == Position::TOP    )  insert( groceryItem, 0      );
   else if( position == Position::BOTTOM )  insert( groceryItem, size() );
   else                                     throw std::logic_error( "Unexpected insertion position" );         // Programmer error.  Should never hit this!
+  std::clog << "insert(" << groceryItem << ", " << (position == Position::TOP ? "TOP" : "BOTTOM") << ") called and size = " << size() << "\n";
 }
 
 
@@ -158,12 +160,17 @@ void GroceryList::insert( const GroceryItem & groceryItem, Position position )
 // insert( offset )
 void GroceryList::insert( const GroceryItem & groceryItem, std::size_t offsetFromTop )        // insert provided grocery item at offsetFromTop, which places it before the current grocery item at offsetFromTop
 {
+  std::clog << "insert(--, " << offsetFromTop << ") called and size = " << size() << "\n";
   // Validate offset parameter before attempting the insertion.  std::size_t is an unsigned type, so no need to check for negative
   // offsets, and an offset equal to the size of the list says to insert at the end (bottom) of the list.  Anything greater than the
   // current size is an error.
-  if( offsetFromTop > size() )   throw InvalidOffset_Ex( std::format( "Insertion position beyond end of current list size\n  position:     {:>2}\n  current size: {:>2}", offsetFromTop, size() ) );
+  if( offsetFromTop > size() ) {
 
+  std::clog << "Invalid Offset_Ex Thrown:\n  position: " << offsetFromTop << "\n  current size: " << size() << "\n  item: " << groceryItem << "\n";
 
+    throw InvalidOffset_Ex( std::format( "Insertion position beyond end of current list size\n  position:     {:>2}\n  current size: {:>2}", offsetFromTop, size() ) );
+
+}
   /**********  Prevent duplicate entries  ***********************/
   ///////////////////////// TO-DO (3) //////////////////////////////
     /// Silently discard duplicate items from getting added to the grocery list.  If the to-be-inserted grocery item is already in
@@ -171,7 +178,15 @@ void GroceryList::insert( const GroceryItem & groceryItem, std::size_t offsetFro
     ///
     /// Remember, you already have a function that tells you if the to-be-inserted grocery item is already in the list, so use it.
     /// Don't implement it again.
-  if (this->find(groceryItem) == size()) return;
+  if (this->find(groceryItem) != size()) {
+
+    std::clog << "Preventing duplicate entries.\n  find(" << groceryItem << ") = " << find(groceryItem) << "\n  size() = " << size() << "\n";
+
+
+  return;
+
+
+  }
   /////////////////////// END-TO-DO (3) ////////////////////////////
 
 
@@ -197,7 +212,13 @@ void GroceryList::insert( const GroceryItem & groceryItem, std::size_t offsetFro
       /// Open a hole to insert new grocery item by shifting to the right everything at and after the insertion point.
       /// For example:  a[8] = a[7];  a[7] = a[6];  a[6] = a[5];  and so on.
       /// std::shift_* will be helpful, or write your own loop.
-    if (_gList_array_size >= _gList_array.size()) throw CapacityExceeded_Ex("array exceeded size");
+    if (_gList_array_size >= _gList_array.size()) {
+      std::clog << "Capacity Exceeded_Ex thrown.\n  _glist_array_size = " << _gList_array_size << "\n  _gList_array.size() = " << _gList_array.size() << "\n";
+      throw CapacityExceeded_Ex("array exceeded size");
+    }
+
+    std::clog << "Attempting to insert into array...\n";
+
     std::shift_right((_gList_array.begin() + offsetFromTop), _gList_array.end(), 1);
     _gList_array[offsetFromTop] = groceryItem;
     ++_gList_array_size;
@@ -217,6 +238,9 @@ void GroceryList::insert( const GroceryItem & groceryItem, std::size_t offsetFro
       ///
       /// Behind the scenes, std::vector::insert() shifts to the right everything at and after the insertion point, just like you
       /// did for the array above.
+
+    std::clog << "Attempting to insert into vector...\n";
+
     _gList_vector.insert((_gList_vector.begin() + offsetFromTop), groceryItem);
     /////////////////////// END-TO-DO (5) ////////////////////////////
   } // Part 2 - Insert into vector
@@ -230,6 +254,9 @@ void GroceryList::insert( const GroceryItem & groceryItem, std::size_t offsetFro
       /// takes a pointer (or more accurately, an iterator) that points to the grocery item to insert before.  You need to convert
       /// the zero-based offset from the top (the index) to an iterator by advancing _gList_dll.begin() offsetFromTop times.  The
       /// STL has a function called std::next() that does that, or you can write your own loop.
+
+    std::clog << "Attempting to insert into DLL...\n";
+
     _gList_dll.insert(std::next(_gList_dll.cbegin(), offsetFromTop), groceryItem);
     /////////////////////// END-TO-DO (6) ////////////////////////////
   } // Part 3 - Insert into doubly linked list
@@ -244,7 +271,11 @@ void GroceryList::insert( const GroceryItem & groceryItem, std::size_t offsetFro
       /// look backwards, only forward.  You need to convert the zero-based offset from the top (the index) to an iterator by
       /// advancing _gList_sll.before_begin() offsetFromTop times.  The STL has a function called std::next() that does that, or you
       /// can write your own loop.
-    _gList_sll.insert_after(std::next(_gList_sll.cbegin(), (offsetFromTop - 1)), groceryItem);
+
+    std::clog << "Attempting to insert into SLL with offset " << offsetFromTop << "...\n";
+
+    //_gList_sll.insert_after(std::next(_gList_sll.cbegin(), offsetFromTop - 1), groceryItem);
+    _gList_sll.insert_after((offsetFromTop == 0 ? _gList_sll.cbefore_begin() : std::next (_gList_sll.cbegin(), offsetFromTop - 1) ), groceryItem);
     /////////////////////// END-TO-DO (7) ////////////////////////////
   } // Part 4 - Insert into singly linked list
 
@@ -363,7 +394,7 @@ GroceryList & GroceryList::operator+=( const std::initializer_list<GroceryItem> 
     /// containers.  The constructor above gives an example.  Remember to add that grocery item at the bottom of each container
     /// (array, vector, list, and forward_list) of this grocery list, and that you already have a function that does that.
   for (GroceryItem item : rhs) {
-    this->insert(item);
+    this->insert(item, size());
   }
   /////////////////////// END-TO-DO (13) ////////////////////////////
 
@@ -384,7 +415,7 @@ GroceryList & GroceryList::operator+=( const GroceryList & rhs )
     /// that grocery item at the bottom of each container (array, vector, list, and forward_list) of this grocery list, and that you
     /// already have a function that does that.
   for (GroceryItem item : rhs._gList_vector) {
-    this->insert(item);
+    this->insert(item, size());
   }
   /////////////////////// END-TO-DO (14) ////////////////////////////
 
@@ -423,7 +454,13 @@ std::weak_ordering GroceryList::operator<=>( GroceryList const & rhs ) const
     ///
     ///
     /// The content of all the grocery lists's containers is the same - so pick an easy one to walk.
-
+  std::size_t common_extent = std::min(size(), rhs.size());
+  std::size_t i = 0;
+  while (i < common_extent && _gList_vector[i] <=> rhs._gList_vector[i] == 0) { // using short circuit logic to prevent out of bounds
+    ++i;
+  }
+  if (i == common_extent) return size() <=> rhs.size();
+  return _gList_vector[i] <=> rhs._gList_vector[i];
   /////////////////////// END-TO-DO (15) ////////////////////////////
 }
 
@@ -442,7 +479,11 @@ bool GroceryList::operator==( GroceryList const & rhs ) const
     ///
     /// Walk the list looking for grocery items that don't match.  The content of all the grocery lists's containers is the same -
     /// so pick an easy one to walk.
-
+  if (size() != rhs.size()) return false;
+  for (std::size_t i = 0; i < size(); ++i) {
+    if (_gList_vector[i] != rhs._gList_vector[i]) return false;
+  }
+  return true;
   /////////////////////// END-TO-DO (16) ////////////////////////////
 }
 
@@ -545,6 +586,11 @@ std::istream & operator>>( std::istream & stream, GroceryList & groceryList )
   ///////////////////////// TO-DO (18) //////////////////////////////
     /// Extract until end of file grocery items from the provided stream and insert them at the bottom of the provided grocery list.
     /// Be sure to extract grocery items and not individual fields such as product name or UPC.
+  while (!stream.eof()) {
+    GroceryItem item;
+    stream >> item >> std::ws;
+    groceryList.insert(item, groceryList.size());
+  }
 
   /////////////////////// END-TO-DO (18) ////////////////////////////
 

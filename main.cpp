@@ -14,11 +14,20 @@ namespace
   void basicScenario()
   {
     // Let's start a grocery list
+    std::clog << "Creating one item...\n";
+    GroceryItem item("brodyitem");
+    std::clog << "GroceryItem created: " << item << "\n";
+    std::clog << "Creating one list...\n";
+    GroceryList list{item};
+    std::clog << "GroceryList created: " << list << "\n";
+
+    std::clog << "Creating thingsToBuy...\n";
     GroceryList thingsToBuy = { { "milk"     },
                                 { "hot dogs" },
                                 { "eggs"     },
                                 { "bread"    } };
 
+    std::clog << "Created thingsToBuy.\nthingsToBUy.size() = " << thingsToBuy.size() << "\n";
     // Changed my mind, I want to make sure I can get eggs before running out of money so I'm going to move that to the top of my list
     thingsToBuy.moveToTop( { "eggs" } );
 

@@ -410,6 +410,7 @@ std::istream & operator>>( std::istream & stream, GroceryItem & groceryItem )
   {
     groceryItem = std::move( item );
   }
+  else stream.setstate( std::ios::failbit );
   return stream;
   /////////////////////// END-TO-DO (21) ////////////////////////////
 }
