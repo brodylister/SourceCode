@@ -124,7 +124,7 @@ std::size_t GroceryList::find( const GroceryItem & groceryItem ) const
     /// does not exist, return the size of this grocery list as an indicator the grocery item does not exist.  The grocery item will
     /// be in the same position in all the containers (array, vector, list, and forward_list) so pick just one of those to search.
     /// The STL provides the find() function that is a perfect fit here, but you may also write your own loop.
-  return static_cast<std::size_t>(std::distance(_gList_vector.begin(), std::find(_gList_vector.begin(), _gList_vector.end(), groceryItem)));
+  return (std::find(_gList_vector.begin(), _gList_vector.end(), groceryItem) - _gList_vector.begin());
   /////////////////////// END-TO-DO (2) ////////////////////////////
 }
 
@@ -169,7 +169,7 @@ void GroceryList::insert( const GroceryItem & groceryItem, std::size_t offsetFro
     ///
     /// Remember, you already have a function that tells you if the to-be-inserted grocery item is already in the list, so use it.
     /// Don't implement it again.
-  if (this->find(groceryItem) != size()) return;
+  if (find(groceryItem) != size()) return;
   /////////////////////// END-TO-DO (3) ////////////////////////////
 
 
@@ -249,7 +249,7 @@ void GroceryList::insert( const GroceryItem & groceryItem, std::size_t offsetFro
 
 
     //_gList_sll.insert_after(std::next(_gList_sll.cbegin(), offsetFromTop - 1), groceryItem);
-    _gList_sll.insert_after((offsetFromTop == 0 ? _gList_sll.cbefore_begin() : std::next (_gList_sll.cbegin(), offsetFromTop - 1) ), groceryItem);
+    _gList_sll.insert_after(std::next (_gList_sll.cbefore_begin(), offsetFromTop), groceryItem);
     /////////////////////// END-TO-DO (7) ////////////////////////////
   } // Part 4 - Insert into singly linked list
 
@@ -357,8 +357,9 @@ void GroceryList::moveToTop( const GroceryItem & groceryItem )
   ///////////////////////// TO-DO (12) //////////////////////////////
     /// If the grocery item exists, then remove and reinsert it.  Otherwise, do nothing.
     /// Remember, you already have functions to do all this.
-  if (find(groceryItem) == size()) return;
-  this->remove(groceryItem);
+  const auto index = find(groceryItem);
+  if (index == size()) return;
+  this->remove(index);
   this->insert(groceryItem);
   /////////////////////// END-TO-DO (12) ////////////////////////////
 }
@@ -373,8 +374,8 @@ GroceryList & GroceryList::operator+=( const std::initializer_list<GroceryItem> 
     /// grocery list. The input type is just a container of grocery items accessible with iterators just like all the other
     /// containers.  The constructor above gives an example.  Remember to add that grocery item at the bottom of each container
     /// (array, vector, list, and forward_list) of this grocery list, and that you already have a function that does that.
-  for (GroceryItem item : rhs) {
-    this->insert(item, size());
+  for (const GroceryItem & item : rhs) {
+    insert(item, Position::BOTTOM);
   }
   /////////////////////// END-TO-DO (13) ////////////////////////////
 
@@ -394,8 +395,8 @@ GroceryList & GroceryList::operator+=( const GroceryList & rhs )
     /// to traverse. Walk the container you picked inserting its grocery items to the bottom of this grocery list. Remember to add
     /// that grocery item at the bottom of each container (array, vector, list, and forward_list) of this grocery list, and that you
     /// already have a function that does that.
-  for (GroceryItem item : rhs._gList_vector) {
-    this->insert(item, size());
+  for (const GroceryItem & item : rhs._gList_vector) {
+    insert(item, Position::BOTTOM);
   }
   /////////////////////// END-TO-DO (14) ////////////////////////////
 
@@ -434,13 +435,13 @@ std::weak_ordering GroceryList::operator<=>( GroceryList const & rhs ) const
     ///
     ///
     /// The content of all the grocery lists's containers is the same - so pick an easy one to walk.
-  std::size_t common_extent = std::min(size(), rhs.size());
-  std::size_t i = 0;
-  while (i < common_extent && _gList_vector[i] <=> rhs._gList_vector[i] == 0) { // using short circuit logic to prevent out of bounds
-    ++i;
+  const std::size_t common_extent = std::min(size(), rhs.size());
+  std::size_t index = 0;
+  while (index < common_extent && (_gList_vector[index] <=> rhs._gList_vector[index]) == 0) { // using short circuit logic to prevent out of bounds
+    ++index;
   }
-  if (i == common_extent) return size() <=> rhs.size();
-  return _gList_vector[i] <=> rhs._gList_vector[i];
+  if (index == common_extent) return size() <=> rhs.size();
+  return _gList_vector[index] <=> rhs._gList_vector[index];
   /////////////////////// END-TO-DO (15) ////////////////////////////
 }
 
@@ -566,12 +567,10 @@ std::istream & operator>>( std::istream & stream, GroceryList & groceryList )
   ///////////////////////// TO-DO (18) //////////////////////////////
     /// Extract until end of file grocery items from the provided stream and insert them at the bottom of the provided grocery list.
     /// Be sure to extract grocery items and not individual fields such as product name or UPC.
-  while (!stream.eof()) {
-    GroceryItem item;
-    stream >> item >> std::ws;
+      GroceryItem item;
+  while (stream >> item) {
     groceryList.insert(item, groceryList.size());
   }
-
   /////////////////////// END-TO-DO (18) ////////////////////////////
 
   return stream;

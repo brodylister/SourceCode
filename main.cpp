@@ -153,13 +153,13 @@ int main()
 
     expectedResultsStream >> extractedList;
 
-    std::weak_ordering order = room1List <=> room2List;
+    const std::weak_ordering order = room1List <=> room2List;
 
     std::weak_ordering order2 = order;
 
-    bool beveragePreferences = room2List == room3List;
+    const bool beveragePreferences = room2List == room3List;
 
-    bool bevPref2 = beveragePreferences;
+    const bool bevPref2 = beveragePreferences;
 
     if (bevPref2 || beReallyShocked) order2 = std::weak_ordering::equivalent;
 
