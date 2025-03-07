@@ -124,7 +124,7 @@ std::size_t GroceryList::find( const GroceryItem & groceryItem ) const
     /// does not exist, return the size of this grocery list as an indicator the grocery item does not exist.  The grocery item will
     /// be in the same position in all the containers (array, vector, list, and forward_list) so pick just one of those to search.
     /// The STL provides the find() function that is a perfect fit here, but you may also write your own loop.
-  return (std::find(_gList_vector.begin(), _gList_vector.end(), groceryItem) - _gList_vector.begin());
+  return (std::find(_gList_vector.cbegin(), _gList_vector.cend(), groceryItem) - _gList_vector.cbegin());
   /////////////////////// END-TO-DO (2) ////////////////////////////
 }
 
@@ -197,7 +197,7 @@ void GroceryList::insert( const GroceryItem & groceryItem, std::size_t offsetFro
       /// std::shift_* will be helpful, or write your own loop.
     if (_gList_array_size >= _gList_array.size()) throw CapacityExceeded_Ex("array exceeded size");
 
-    std::shift_right((_gList_array.begin() + offsetFromTop), _gList_array.end(), 1);
+    std::shift_right((_gList_array.begin() + offsetFromTop), (_gList_array.begin() + _gList_array_size), 1);
     _gList_array[offsetFromTop] = groceryItem;
     ++_gList_array_size;
     /////////////////////// END-TO-DO (4) ////////////////////////////
@@ -291,12 +291,17 @@ void GroceryList::remove( std::size_t offsetFromTop )
       /// std::shift_* will be helpful, or write your own loop.  Also remember that you must keep track of the number of valid
       /// grocery items in your array, so don't forget to adjust _gList_array_size.
 
-
+    /*
     for (auto i = offsetFromTop + 1; i != _gList_array_size; ++i) {
       _gList_array[i-1] = std::move(_gList_array[i]);
     }
-    _gList_array[_gList_array_size - 1] = GroceryItem{};
+    _gList_array[_gList_array_size - 1] = GroceryItem();
     --_gList_array_size;
+    */
+
+    std::move(_gList_array.begin() + offsetFromTop + 1, _gList_array.begin() + _gList_array_size, _gList_array.begin() + offsetFromTop);
+    --_gList_array_size;
+    _gList_array[_gList_array_size] = {};
     /////////////////////// END-TO-DO (8) ////////////////////////////
   } // Part 1 - Remove from array
 
@@ -340,7 +345,8 @@ void GroceryList::remove( std::size_t offsetFromTop )
       /// cannot look backwards, only forward.  You need to convert the zero-based offset from the top (the index) to an iterator by
       /// advancing _gList_sll.before_begin() offsetFromTop times.  The STL has a function called std::next() that does that, or you
       /// can write your own loop.
-    _gList_sll.erase_after(offsetFromTop == 0 ? _gList_sll.before_begin() : std::next(_gList_sll.begin(), (offsetFromTop - 1)));
+    //_gList_sll.erase_after(offsetFromTop == 0 ? _gList_sll.before_begin() : std::next(_gList_sll.begin(), (offsetFromTop - 1)));
+    _gList_sll.erase_after(std::next(_gList_sll.before_begin(), offsetFromTop));
     /////////////////////// END-TO-DO (11) ////////////////////////////
   } // Part 4 - Remove from singly linked list
 
@@ -359,8 +365,8 @@ void GroceryList::moveToTop( const GroceryItem & groceryItem )
     /// Remember, you already have functions to do all this.
   const auto index = find(groceryItem);
   if (index == size()) return;
-  this->remove(index);
-  this->insert(groceryItem);
+  remove(index);
+  insert(groceryItem, Position::TOP);
   /////////////////////// END-TO-DO (12) ////////////////////////////
 }
 
@@ -374,7 +380,7 @@ GroceryList & GroceryList::operator+=( const std::initializer_list<GroceryItem> 
     /// grocery list. The input type is just a container of grocery items accessible with iterators just like all the other
     /// containers.  The constructor above gives an example.  Remember to add that grocery item at the bottom of each container
     /// (array, vector, list, and forward_list) of this grocery list, and that you already have a function that does that.
-  for (const GroceryItem & item : rhs) {
+  for (auto && item : rhs) {
     insert(item, Position::BOTTOM);
   }
   /////////////////////// END-TO-DO (13) ////////////////////////////
@@ -395,7 +401,7 @@ GroceryList & GroceryList::operator+=( const GroceryList & rhs )
     /// to traverse. Walk the container you picked inserting its grocery items to the bottom of this grocery list. Remember to add
     /// that grocery item at the bottom of each container (array, vector, list, and forward_list) of this grocery list, and that you
     /// already have a function that does that.
-  for (const GroceryItem & item : rhs._gList_vector) {
+  for (auto && item : rhs._gList_vector) {
     insert(item, Position::BOTTOM);
   }
   /////////////////////// END-TO-DO (14) ////////////////////////////
