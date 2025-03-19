@@ -1,30 +1,7 @@
-My Grocery List
-    0:  "",  "",  "eggs",  0
-    1:  "",  "",  "milk",  0
-
-My roommate's Grocery List
-    0:  "",  "Ruffles",  "potato chips",  0
-    1:  "",  "Frito Lays",  "potato chips",  0
-
-Combined Grocery Lists
-    0:  "",  "",  "eggs",  0
-    1:  "",  "",  "milk",  0
-    2:  "",  "Ruffles",  "potato chips",  0
-    3:  "",  "Frito Lays",  "potato chips",  0
-
-
-Expected results:
-    0:  "",  "",  "eggs",  0
-    1:  "",  "",  "milk",  0
-    2:  "",  "",  "hot dogs",  0
-    3:  "",  "Lakes 'Ole",  "butter",  0
-
-
-Actual results:  
-    0:  "",  "",  "eggs",  0
-    1:  "",  "",  "milk",  0
-    2:  "",  "",  "hot dogs",  0
-    3:  "",  "Lakes 'Ole",  "butter",  0
-
-
-Test results:    PASS
+"00688267039317",  "Nature's Promise",  "Nature's Promise Naturals Fresh Brown Eggs Omega 3 Large",  77.47
+"00835841005255",  "Fiber One",  "Fiber One Bread Country White",  8.73
+"09073649000493" (pumpkin pie) not found, so today is your lucky day - You get it free! Hooray!
+"00038000291210",  "Rice Krispies",  "Kellogg's Rice Krispies Cereal",  40.37
+"00075457129000",  "Kirkland Foods",  "Kirkland Family Farms Dairy Pure Milk 1½% Lowfat",  30.28
+-------------------------
+Total  $156.85
