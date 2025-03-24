@@ -139,12 +139,12 @@ namespace
     ///////////////////////// TO-DO (1) //////////////////////////////
       /// Implement the algorithm above.
     if (quantity == 1) {
-      working_cart.push(broken_cart.top());
+      working_cart.push(std::move(broken_cart.top()));
       broken_cart.pop();
       trace(broken_cart, working_cart, spare_cart);
     } else {
       carefully_move_grocery_items(quantity - 1, broken_cart, spare_cart, working_cart);
-      working_cart.push(broken_cart.top());
+      working_cart.push(std::move(broken_cart.top()));
       broken_cart.pop();
       trace(broken_cart, working_cart, spare_cart);
       carefully_move_grocery_items(quantity - 1, spare_cart, working_cart, broken_cart);
@@ -163,7 +163,7 @@ namespace
       /// just like they already are in the "from" cart.  That is, call the above carefully_move_grocery_items function to start
       /// moving grocery items recursively.  Call the above trace function just before calling carefully_move_grocery_items to get a
       /// starting point reference in the movement report.
-    if (from.size() != 0) {
+    if (!from.empty()) {
       std::stack<GroceryItem> spare_cart;
       trace(from, to, spare_cart);
       carefully_move_grocery_items(from.size(), from, to, spare_cart);
@@ -204,12 +204,12 @@ int main( int argc, char * argv[] )
     //      00075457129000   milk             any                     <===  heaviest item, put this on the bottom
 
     ///////////////////////// TO-DO (4) //////////////////////////////
-    GroceryItem eggs{"eggs", "any", "00688267039317"};
-    GroceryItem bread{"bread", "any", "00835841005255"};
-    GroceryItem apple_pie{"apple pie", "any", "09073649000493"};
-    GroceryItem hotdogs{"hotdogs", "Applegate Farms", "00025317533003"};
-    GroceryItem rice_krispies{"rice krispies", "Kellogg's", "00038000291210"};
-    GroceryItem milk{"milk", "any", "00075457129000"};
+    const GroceryItem milk{           "milk",           "any",              "00075457129000"};
+    const GroceryItem rice_krispies{  "rice krispies",  "Kellogg's",        "00038000291210"};
+    const GroceryItem hotdogs{        "hotdogs",        "Applegate Farms",  "00025317533003"};
+    const GroceryItem apple_pie{      "apple pie",      "any",              "09073649000493"};
+    const GroceryItem bread{          "bread",          "any",              "00835841005255"};
+    const GroceryItem eggs{           "eggs",           "any",              "00688267039317"};
 
     myCart.push(milk);
     myCart.push(rice_krispies);
@@ -239,8 +239,8 @@ int main( int argc, char * argv[] )
       /// Create an empty checkout counter as a queue of grocery items and call it checkoutCounter.  Then remove the grocery items
       /// from your working cart and place them on the checkout counter, i.e., put them in this checkoutCounter queue.
     std::queue<GroceryItem> checkoutCounter;
-    while (workingCart.size() > 0) {
-      checkoutCounter.push(workingCart.top());
+    while (!workingCart.empty()) {
+      checkoutCounter.push(std::move(workingCart.top()));
       workingCart.pop();
     }
     /////////////////////// END-TO-DO (6) ////////////////////////////
@@ -259,13 +259,13 @@ int main( int argc, char * argv[] )
       /// description and price on the receipt (i.e. write the grocery item's full description and price to standard output).
       /// Otherwise, print a message on the receipt that a description and price for the grocery item wasn't found and there will be
       /// no charge.
-    while (checkoutCounter.size() > 0) {
+    while (!checkoutCounter.empty()) {
       auto pointer = worldWideDatabase.find(checkoutCounter.front().upcCode());
       if (pointer != nullptr) {
-        std::cout << *pointer << "\n";
+        std::cout << *pointer << '\n';
         amountDue += pointer->price();
       } else {
-        std::cout << "\"" << checkoutCounter.front().upcCode() << "\" (" << checkoutCounter.front().productName() << ") not found, so you get it free!\n";
+        std::cout << '\"' << checkoutCounter.front().upcCode() << "\" (" << checkoutCounter.front().productName() << ") not found, so you get it free!\n";
       }
       checkoutCounter.pop();
     }

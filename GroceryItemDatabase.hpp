@@ -5,8 +5,9 @@
   /// Hint:  Include what you use, use what you include
   ///
   /// Do not put anything else in this section, i.e. comments, classes, functions, etc.  Only #include directives
-#include "GroceryItem.hpp"
 #include <vector>
+
+#include "GroceryItem.hpp"
 /////////////////////// END-TO-DO (1) ////////////////////////////
 
 

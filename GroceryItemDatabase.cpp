@@ -3,10 +3,14 @@
   /// Hint:  Include what you use, use what you include
   ///
   /// Do not put anything else in this section, i.e. comments, classes, functions, etc.  Only #include directives
-#include "GroceryItemDatabase.hpp"
-
+#include <cstddef>
+#include <vector>
 #include <fstream>
 #include <filesystem>
+#include <utility>
+
+#include "GroceryItemDatabase.hpp"
+#include "GroceryItem.hpp"
 /////////////////////// END-TO-DO (1) ////////////////////////////
 
 
@@ -68,7 +72,7 @@ GroceryItemDatabase::GroceryItemDatabase( const std::string & filename )
     ///        Read grocery items until end of file pushing each grocery item into the data store as they're read.
   GroceryItem temp_item;
   while (fin >> temp_item) {
-    _database_vector.push_back(temp_item);
+    _database_vector.push_back(std::move(temp_item));
   }
   /////////////////////// END-TO-DO (2) ////////////////////////////
 
