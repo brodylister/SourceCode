@@ -6,6 +6,7 @@
   ///
   /// Do not put anything else in this section, i.e. comments, classes, functions, etc.  Only #include directives
 #include "GroceryItem.hpp"
+#include <vector>
 /////////////////////// END-TO-DO (1) ////////////////////////////
 
 
@@ -31,6 +32,8 @@ class GroceryItemDatabase
     ///////////////////////// TO-DO (2) //////////////////////////////
       /// Private implementation details
       /// Add any necessary private helper functions, member attributes, etc.
+    std::vector<GroceryItem> _database_vector;
 
+    GroceryItem * find( const std::string & upc, std::vector<GroceryItem>::iterator iter ); // helper function
     /////////////////////// END-TO-DO (2) ////////////////////////////
 };
