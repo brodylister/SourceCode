@@ -1,40 +1,50 @@
 #pragma once
 
-///////////////////////// TO-DO (1) //////////////////////////////
-  /// Include necessary header files
-  /// Hint:  Include what you use, use what you include
-  ///
-  /// Do not put anything else in this section, i.e. comments, classes, functions, etc.  Only #include directives
-#include <vector>
+#include <compare>                                                              // *_ordering
+#include <cstddef>                                                              // size_t
+#include <string>
+#include <map>
 
 #include "GroceryItem.hpp"
-/////////////////////// END-TO-DO (1) ////////////////////////////
+
 
 
 // Singleton Design Pattern
 class GroceryItemDatabase
 {
   public:
-    // Get a reference to the one and only instance of the database
-    static GroceryItemDatabase & instance();
+    // Public Types
+    class Key;
 
-    // Locate and return a reference to a particular record
-    GroceryItem * find( const std::string & upc );                              // Returns a pointer to the item in the database if
+    // Database Access
+    static GroceryItemDatabase & instance();
                                                                                 // found, nullptr otherwise
     // Queries
-    std::size_t size() const;                                                   // Returns the number of items in the database
+    GroceryItem * find( const Key & upc );                                      // Locates and returns a pointer to the item in the database if
+    std::size_t   size() const;                                                 // Returns the number of items in the database
 
   private:
-    GroceryItemDatabase            ( const std::string & filename );
+    GroceryItemDatabase( const std::string & filename );
 
-    GroceryItemDatabase            ( const GroceryItemDatabase & ) = delete;    // intentionally prohibit making copies
+    GroceryItemDatabase( const GroceryItemDatabase & )             = delete;    // intentionally prohibit making copies
     GroceryItemDatabase & operator=( const GroceryItemDatabase & ) = delete;    // intentionally prohibit copy assignments
 
-    ///////////////////////// TO-DO (2) //////////////////////////////
-      /// Private implementation details
-      /// Add any necessary private helper functions, member attributes, etc.
-    std::vector<GroceryItem> _database_vector;
 
-    GroceryItem * find( const std::string & upc, std::vector<GroceryItem>::iterator iter ); // helper function
-    /////////////////////// END-TO-DO (2) ////////////////////////////
+    std::map<Key /*UPC*/, GroceryItem> _data;                                   // Collection of grocery items indexed by UPC
+};
+
+
+
+
+class GroceryItemDatabase::Key
+{
+  public:                                                                       // No implicit conversion from string to Key.
+    explicit Key( std::string value );                                          // Causes the default constructor to not be synthesized (intentional), the other 5 are synthesized and just what we want
+    std::string const & to_string() const;
+
+    auto operator<=>( Key const & rhs ) const = default;                        // Endow objects with the ability to compare themselves
+    bool operator== ( Key const & rhs ) const = default;
+
+  private:
+    std::string _upc;                                                           // The key of the Grocery Item is its UPC
 };

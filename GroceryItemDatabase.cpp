@@ -3,14 +3,7 @@
   /// Hint:  Include what you use, use what you include
   ///
   /// Do not put anything else in this section, i.e. comments, classes, functions, etc.  Only #include directives
-#include <cstddef>
-#include <vector>
-#include <fstream>
-#include <filesystem>
-#include <utility>
 
-#include "GroceryItemDatabase.hpp"
-#include "GroceryItem.hpp"
 /////////////////////// END-TO-DO (1) ////////////////////////////
 
 
@@ -50,10 +43,11 @@ GroceryItemDatabase::GroceryItemDatabase( const std::string & filename )
   std::ifstream fin( filename, std::ios::binary );
   if( !fin.is_open() ) std::cerr << "Warning:  Could not open persistent grocery item database file \"" << filename << "\".  Proceeding with empty database\n\n";
 
-  // The file contains GroceryItems separated by whitespace.  A GroceryItem has 4 pieces of data delimited with a comma.  (This
+  // The file contains grocery items separated by whitespace.  A grocery item has 4 pieces of data delimited with a comma.  (This
   // exactly matches the previous assignment as to how GroceryItems are read)
   //
   //       Field            Type            Notes
+  //       --------------------------------------------------------------------------------------------------
   //  1.   UPC Code         String          Unique identifier (primary key), always enclosed in double quotes
   //  2.   Brand Name       String          May contain spaces, always enclosed in double quotes
   //  3.   Product Name     String          May contain spaces, always enclosed in double quotes
@@ -61,7 +55,7 @@ GroceryItemDatabase::GroceryItemDatabase( const std::string & filename )
   //
   //  Example:
   //    "00024600017008",   "Morton",         "Morton Kosher Salt Coarse",                                    15.17
-  //    "00033674100066",   "Nature's Way",   "Nature's Way Forskohlii - 60 Ct",                               6.11
+  //    "00033674100066",   "Nature's Way",   "Nature's Way Forskohlii - 60 Ct",                              6.11
   //    "00041520893307",   "Smart Living",   "Smart Living 10.5\" X 8\" 3 Subject Notebook College Ruled",   18.98
   //
   //  Note: double quotes within the string are escaped with the backslash character
@@ -70,10 +64,7 @@ GroceryItemDatabase::GroceryItemDatabase( const std::string & filename )
   ///////////////////////// TO-DO (2) //////////////////////////////
     /// Hint:  Use your GroceryItem's extraction operator to read GroceryItems, don't reinvent that here.
     ///        Read grocery items until end of file pushing each grocery item into the data store as they're read.
-  GroceryItem temp_item;
-  while (fin >> temp_item) {
-    _database_vector.push_back(std::move(temp_item));
-  }
+
   /////////////////////// END-TO-DO (2) ////////////////////////////
 
   // Note:  The file is intentionally not explicitly closed.  The file is closed when fin goes out of scope - for whatever
@@ -90,33 +81,33 @@ GroceryItemDatabase::GroceryItemDatabase( const std::string & filename )
 
 
 ///////////////////////// TO-DO (3) //////////////////////////////
-  /// Implement the rest of the interface, including functions find (recursively) and size
+  /// Implement the rest of the interface, including functions find and size
   ///
-  /// See the SinglyLinkedList's extended interface in our Sequence Container Implementation Examples (SinglyLinkedList.hpp) for a
-  /// recursive find function example. Instead of starting at the head of the list, you want to start at the beginning of your data
-  /// store.
-  ///
-  /// Programming note:  An O(n) operation, like searching an unsorted vector, would not generally be implemented recursively.  The
-  ///                    depth of recursion may be greater than the program's function call stack size.  But for this programming
-  ///                    exercise, getting familiar with recursion is a goal.
-GroceryItem * GroceryItemDatabase::find( const std::string & upc ) {
-  auto iter = _database_vector.begin();
-  return find(upc, iter);
-} // GroceryItemDatabase::find( const std::string & upc )
-
-GroceryItem * GroceryItemDatabase::find( const std::string & upc, std::vector<GroceryItem>::iterator iter) {
-  if (iter == _database_vector.end()) return nullptr;
-
-  if (iter->upcCode() == upc) {
-    GroceryItem * pointer = &(*iter);
-    return pointer;
-  }
-
-  return find(upc, ++iter);
-} // GroceryItemDatabase::find( const std::string & upc, std::vector<GroceryItem>::iterator iter)
-
-std::size_t GroceryItemDatabase::size() const {
-  return _database_vector.size();
-} // GroceryItemDatabase::size()
+  /// In the last assignment you implemented GroceryItemDatabase::find() as a recursive linear search (an O(n) operation).  In this
+  /// assignment, implement GroceryItemDatabase::find() as a binary search (an O(log n) operation) by delegating to the std::map's binary
+  /// search function find().
 
 /////////////////////// END-TO-DO (3) ////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Grocery Item Database Key Implementation
+GroceryItemDatabase::Key::Key( std::string value ) : _upc{ std::move(value) }
+{}
+
+
+std::string const & GroceryItemDatabase::Key::to_string() const
+{ return _upc; }
