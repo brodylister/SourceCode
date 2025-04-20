@@ -3,7 +3,15 @@
   /// Hint:  Include what you use, use what you include
   ///
   /// Do not put anything else in this section, i.e. comments, classes, functions, etc.  Only #include directives
+#include <map>                        // map
+#include <fstream>                    // ifstream
+#include <filesystem>                 // filesystem::exists
+#include <string>                     // string
+#include <iostream>                   // cerr
+#include <utility>                    // move
 
+#include "GroceryItemDatabase.hpp"
+#include "GroceryItem.hpp"
 /////////////////////// END-TO-DO (1) ////////////////////////////
 
 
@@ -64,7 +72,10 @@ GroceryItemDatabase::GroceryItemDatabase( const std::string & filename )
   ///////////////////////// TO-DO (2) //////////////////////////////
     /// Hint:  Use your GroceryItem's extraction operator to read GroceryItems, don't reinvent that here.
     ///        Read grocery items until end of file pushing each grocery item into the data store as they're read.
-
+  GroceryItem temp_item;
+  while (fin >> temp_item) {
+    _data.insert(std::move(std::pair(temp_item.upcCode(), temp_item)));
+  }
   /////////////////////// END-TO-DO (2) ////////////////////////////
 
   // Note:  The file is intentionally not explicitly closed.  The file is closed when fin goes out of scope - for whatever
