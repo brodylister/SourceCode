@@ -9,6 +9,7 @@
 #include <string>                     // string
 #include <iostream>                   // cerr
 #include <utility>                    // move
+#include <cstddef>                    // size_t
 
 #include "GroceryItemDatabase.hpp"
 #include "GroceryItem.hpp"
@@ -74,7 +75,7 @@ GroceryItemDatabase::GroceryItemDatabase( const std::string & filename )
     ///        Read grocery items until end of file pushing each grocery item into the data store as they're read.
   GroceryItem temp_item;
   while (fin >> temp_item) {
-    _data.insert(std::move(std::pair(temp_item.upcCode(), temp_item)));
+    _data.insert(std::pair(temp_item.upcCode(), temp_item));
   }
   /////////////////////// END-TO-DO (2) ////////////////////////////
 
@@ -97,7 +98,19 @@ GroceryItemDatabase::GroceryItemDatabase( const std::string & filename )
   /// In the last assignment you implemented GroceryItemDatabase::find() as a recursive linear search (an O(n) operation).  In this
   /// assignment, implement GroceryItemDatabase::find() as a binary search (an O(log n) operation) by delegating to the std::map's binary
   /// search function find().
+GroceryItem * GroceryItemDatabase::find( const Key & upc ) {
+  auto iter = _data.find(upc);
+  if (iter == _data.end()) {
+    return nullptr;
+  } else {
+    return &iter->second;
+  }
+}
 
+
+std::size_t   GroceryItemDatabase::size() const {
+  return _data.size();
+}
 /////////////////////// END-TO-DO (3) ////////////////////////////
 
 

@@ -1,7 +1,15 @@
 ///////////////////////// TO-DO (1) //////////////////////////////
   /// Include necessary header files
   /// Hint:  Include what you use, use what you include
+#include <map>      // map, pair
+#include <fstream>  // fstream
+#include <iostream> // cerr
+#include <string>   // string
+#include <utility>  // move
+#include <iomanip>  // quoted(), ios::failbit
 
+#include "GroceryStore.hpp"
+#include "GroceryItemDatabase.hpp"
 /////////////////////// END-TO-DO (1) ////////////////////////////
 
 
@@ -33,7 +41,16 @@ GroceryStore::GroceryStore( const std::string & persistentInventoryDB )
     ///       See
     ///        1) https://en.cppreference.com/w/cpp/io/manip/quoted
     ///        2) https://www.youtube.com/watch?v=Mu-GUZuU31A
-
+  while (fin) {
+    std::pair<std::string, unsigned int> temp_upc_quantity_pair;
+    if (
+      fin >> std::ws >> std::quoted(temp_upc_quantity_pair.first) &&
+      fin >> std::ws >> temp_upc_quantity_pair.second
+    ) {
+      _inventoryDB.insert(std::move(temp_upc_quantity_pair));
+    }
+    else fin.setstate(std::ios::failbit);
+  }
   /////////////////////// END-TO-DO (2) ////////////////////////////
 }                                                                 // File is closed as fin goes out of scope (RAII)
 
@@ -78,7 +95,23 @@ GroceryStore::GroceryItemsSold GroceryStore::ringUpCustomer( const ShoppingCart 
     ///       2.2.3.1              Decrease the number of items on hand for the item sold
     ///       2.2.3.2              Add the items's UPC to the list of groceries purchased
     ///       3         Print the total amount due on the receipt
-
+  double amount_due = 0.0;
+  for (auto pair : shoppingCart) {
+    auto wwdb_iter = worldWideGroceryDatabase.find(GroceryItemDatabase::Key(pair.first));
+    if (wwdb_iter == nullptr) {
+      receipt << "\t" << pair.first << " (" << pair.second.productName() << ") not found -- so the item is free!\n";
+    } else {
+      receipt << "\t" << *wwdb_iter << "\n";
+      amount_due += wwdb_iter->price();
+      auto store_iter = _inventoryDB.find(pair.first);
+      if (store_iter != _inventoryDB.end()) {
+        --store_iter->second;
+        purchasedGroceries.insert(pair.first);
+      }
+    }
+  }
+  receipt << "\t-------------------------\n";
+  receipt << "\tTotal  $" << amount_due << "\n";
   /////////////////////// END-TO-DO (3) ////////////////////////////
 
   return purchasedGroceries;
@@ -97,7 +130,14 @@ GroceryStore::GroceryItemsSold GroceryStore::ringUpCustomers( const ShoppingCart
   ///////////////////////// TO-DO (4) //////////////////////////////
     ///  Ring up each customer accumulating the groceries purchased
     ///  Hint:  merge each customer's purchased groceries into today's sales.  (https://en.cppreference.com/w/cpp/container/set/merge)
-
+  for (auto pair : shoppingCarts) {
+    receipt << pair.first << "'s Shopping Cart Contains:\n";
+    auto customerSale = ringUpCustomer(pair.second, receipt);
+    receipt << "\n";
+    for (auto string : customerSale) {
+      todaysSales.insert(string);
+    }
+  }
   /////////////////////// END-TO-DO (4) ////////////////////////////
 
   return todaysSales;
@@ -134,7 +174,26 @@ void GroceryStore::reorderItems( GroceryItemsSold & todaysSales, std::ostream & 
     ///        2       Reset the list of grocery item sold today so the list can be reused again later
     ///
     /// Take special care to avoid excessive searches in your solution
-
+  for (auto string : todaysSales) {
+    auto store_iter = _inventoryDB.find(string);
+    auto wwdb_iter = worldWideGroceryDatabase.find(GroceryItemDatabase::Key(string));
+    if ( (store_iter == _inventoryDB.end()) || (store_iter->second < REORDER_THRESHOLD) ) {
+      if (wwdb_iter == nullptr) {
+        reorderReport << string << "\n";
+       } else {
+        reorderReport << *wwdb_iter << "\n";
+       }
+      if (store_iter == _inventoryDB.end()) {
+          reorderReport << "\t *** no longer sold in this store and will not be re-ordered\n";
+      } else {
+          reorderReport << "\t only " << store_iter->second << " remain in stock which is " << (REORDER_THRESHOLD - store_iter->second) << " unit(s) below reorder threshold ("
+                        << REORDER_THRESHOLD << "), reordering " << LOT_COUNT << " more\n";
+          store_iter->second += LOT_COUNT;
+      }
+      reorderReport << "\n";
+    }
+  }
+  todaysSales.clear();
   /////////////////////// END-TO-DO (5) ////////////////////////////
 }
 

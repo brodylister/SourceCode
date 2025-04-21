@@ -1,0 +1,155 @@
+Charlie Brown's Shopping Cart Contains:
+	"", "", "Lump Of Coal", 0.00
+	-------------------------
+	Total  $0.00
+
+Lucy van Pelt's Shopping Cart Contains:
+	"", "", "Calcium Softgels", 0.00
+	"", "", "Pineapple", 0.00
+	"", "", "Dressing", 0.00
+	"", "", "Sleep Mask Blue", 0.00
+	"", "", "Manzanillo", 0.00
+	"", "", "Deodorant", 0.00
+	"", "", "Tea", 0.00
+	"", "", "Cheddar Cheese", 0.00
+	"", "", "Crackers", 0.00
+	"", "", "Dog Food", 0.00
+	"", "", "Baby Food", 0.00
+	"", "", "Drinks", 0.00
+	-------------------------
+	Total  $0.00
+
+Peppermint Patty's Shopping Cart Contains:
+	"", "", "Potato Spuds", 0.00
+	"", "", "Applesauce", 0.00
+	"", "", "Truffles", 0.00
+	"", "", "Pancake Mix", 0.00
+	"", "", "Soap", 0.00
+	"", "", "Deodorant", 0.00
+	"", "", "Pepperoncini", 0.00
+	"", "", "Paper Plates", 0.00
+	"", "", "Soup", 0.00
+	"", "", "Cheese", 0.00
+	"", "", "Plantain Chips", 0.00
+	"", "", "Sandwich", 0.00
+	-------------------------
+	Total  $0.00
+
+Red Baron's Shopping Cart Contains:
+	"", "", "hotdogs", 0.00
+	"", "", "Truffles", 0.00
+	"", "", "rice krispies", 0.00
+	"", "", "milk", 0.00
+	"", "", "eggs", 0.00
+	"", "", "bread", 0.00
+	"", "", "apple pie", 0.00
+	-------------------------
+	Total  $0.00
+
+Schroeder's Shopping Cart Contains:
+	"", "", "Children's Fruit Drink", 0.00
+	"", "", "Granola Cereal", 0.00
+	"", "", "Peanut Butter", 0.00
+	"", "", "Massage Oil", 0.00
+	"", "", "Ground Beef", 0.00
+	"", "", "Mozzarella", 0.00
+	"", "", "Green Tea", 0.00
+	"", "", "Facial Towelettes", 0.00
+	"", "", "Pastry Popover", 0.00
+	"", "", "Stretch Cream", 0.00
+	-------------------------
+	Total  $0.00
+
+Woodstock's Shopping Cart Contains:
+	"", "", "Cinnamon Rolls", 0.00
+	"", "", "Cheesy Potatoes", 0.00
+	"", "", "Forskohlii", 0.00
+	"", "", "Spanish Omelet", 0.00
+	"", "", "Mouth Wash", 0.00
+	"", "", "Tea Sampler", 0.00
+	"", "", "Pepper", 0.00
+	"", "", "Lamb Chops", 0.00
+	"", "", "Fillet Steak", 0.00
+	"", "", "Face Exfoliate", 0.00
+	"", "", "Coffee", 0.00
+	"", "", "Green Tea", 0.00
+	"", "", "Black Beans", 0.00
+	"", "", "Mint Tea", 0.00
+	"", "", "Candy Fruit Chews", 0.00
+	-------------------------
+	Total  $0.00
+
+
+
+
+
+
+"00025317533003", "Applegate Farms", "Hotdog Uncrd Big Apple", 12.57
+	 only 8 remain in stock which is 5 unit(s) below reorder threshold (13), reordering 16 more
+
+
+
+
+
+
+"00041331092609", "Goya", "Frz Spnsh Omelet", 16.84
+	 only 8 remain in stock which is 5 unit(s) below reorder threshold (13), reordering 16 more
+
+
+
+
+
+"00070596000647", "Ultra Glow", "Ultra Glow Black Soap", 21.19
+	 only 12 remain in stock which is 1 unit(s) below reorder threshold (13), reordering 16 more
+
+
+"00072591002251", "Log House", "Chip Pnut Bttr", 9.74
+	 only 11 remain in stock which is 2 unit(s) below reorder threshold (13), reordering 16 more
+
+
+"00073377801839", "Earth Therapeutics", "Earth Therapeutics Sleep Mask Blue - 1 Mask", 9.95
+	 only 12 remain in stock which is 1 unit(s) below reorder threshold (13), reordering 16 more
+
+"00075457129000", "Garelick Farms", "Garelick Farms Dairy Pure Milk 1% Lowfat", 9.64
+	 only 9 remain in stock which is 4 unit(s) below reorder threshold (13), reordering 16 more
+
+
+
+
+
+
+
+
+
+"00219019100001", "Nature's Promise", "Nature's Promise Laura's Lean All Natural Ground Beef 92% Lean", 14.06
+	 only 12 remain in stock which is 1 unit(s) below reorder threshold (13), reordering 16 more
+
+
+
+
+
+
+"00688267133442", "Ahold", "Ahold Extra Bold 100% Arabica Coffee Single Serving Cups - 12 Ct", 20.06
+	 only 8 remain in stock which is 5 unit(s) below reorder threshold (13), reordering 16 more
+
+"00688267138973", "Simply Enjoy", "Simply Enjoy Acai Berry Loose Organic Green Tea", 20.41
+	 only 9 remain in stock which is 4 unit(s) below reorder threshold (13), reordering 16 more
+
+
+
+"00763795931415", "Hallmark", "Hallmark Plates Nfl Chicago Bears - 8 Ct", 5.51
+	 only 11 remain in stock which is 2 unit(s) below reorder threshold (13), reordering 16 more
+
+
+
+
+
+
+
+
+
+
+
+
+
+
