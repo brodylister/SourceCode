@@ -174,6 +174,7 @@ void GroceryStore::reorderItems( GroceryItemsSold & todaysSales, std::ostream & 
     ///        2       Reset the list of grocery item sold today so the list can be reused again later
     ///
     /// Take special care to avoid excessive searches in your solution
+  reorderReport << "Re-ordering grocery items the store is low on.\n\n";
   for (auto string : todaysSales) {
     auto store_iter = _inventoryDB.find(string);
     auto wwdb_iter = worldWideGroceryDatabase.find(GroceryItemDatabase::Key(string));

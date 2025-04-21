@@ -5,7 +5,6 @@
 #include "GroceryStore.hpp"
 
 
-#include "GroceryItemDatabase.hpp"
 
 
 
@@ -48,11 +47,8 @@ int main()
       /// The store's managers have decided to stop selling Frozen Spanish Omelets (UPC = 00041331092609), so remove this from the
       /// store's inventory.
       ///
-    GroceryStore::Inventory_DB myStoreInventory = myStore.inventory();
+    GroceryStore::Inventory_DB & myStoreInventory = myStore.inventory();
     myStoreInventory.erase("00041331092609");
-
-    auto finder = myStoreInventory.find("00041331092609");
-    std::cout << "Does 00041331092609 exist in the inventory? " << (finder == myStoreInventory.end() ? "EQ to END" : "NEQ to END");
     /////////////////////// END-TO-DO (4) ////////////////////////////
 
 
