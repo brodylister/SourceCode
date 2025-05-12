@@ -4,6 +4,15 @@
   ///
   /// Do not put anything else in this section, i.e. comments, classes, functions, etc.  Only #include directives
 
+#include <iostream>         // cout
+#include <fstream>          // ifstream
+#include <cstddef>          // size_t
+#include <utility>          // hash
+#include <string>           // string
+#include <unordered_map>    // unordered_map
+
+#include "WordFrequency.hpp"
+#include "CheckResults.hpp"
 /////////////////////// END-TO-DO (1) ////////////////////////////
 
 
@@ -30,7 +39,19 @@ namespace
     std::size_t operator()( const std::string & key ) const noexcept
     {
       ///////////////////////// TO-DO (2) //////////////////////////////
+      // Basing off the provided polynomial rolling hash function
+      constexpr std::size_t p = 31;                                 // prime number greater than possible characters
+      constexpr std::size_t m = 1000000009;                            // very large prime number for multiplication (should result in very low collisions)
+      std::size_t hash_value = 0;
+      std::size_t p_power = 1;
 
+      for ( char c : key )
+      {
+        hash_value = ( hash_value + ( c - 'a' + 1 ) * p_power ) % m;    // using a = 1 to prevent a, aa, aaa from having the same hash
+        p_power = ( p_power * p ) % m;
+      }
+
+      return hash_value;
       /////////////////////// END-TO-DO (2) ////////////////////////////
     }
   };

@@ -6,7 +6,10 @@
   /// Hint:  Include what you use, use what you include
   ///
   /// Do not put anything else in this section, i.e. comments, classes, functions, etc.  Only #include directives
-
+#include <utility>      // hash
+#include <string>       // string
+#include <cstddef>      // size_t
+#include <unordered_map> // unordered_map
 /////////////////////// END-TO-DO (1) ////////////////////////////
 
 
@@ -35,7 +38,7 @@ class WordFrequency
       /// implementation of a hash table, to store the association of words (key) to the number of times a word occurs (value). Be
       /// sure to provide all three types when defining the std::unordered_map, including setting std::unordered_map's third
       /// argument to Hasher (WordFrequency's template parameter).
-
+    std::unordered_map<std::string, std::size_t, Hasher> _hashtable;
     /////////////////////// END-TO-DO (2) ////////////////////////////
 };
 
